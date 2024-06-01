@@ -51,7 +51,7 @@ public class Sketch extends PApplet {
     imgCenterstageLogo = loadImage("Logos/Centerstage_Logo.png");
     imgPowerplayLogo = loadImage("Logos/Powerplay_Logo.png");
     imgFreightFrenzyLogo = loadImage("Logos/FreightFrenzy_Logo.png");
-    imgFTCRobot = loadImage("Robots/testing.png");
+    imgFTCRobot = loadImage("Robots/PlayerRobot.png");
     imgLoadedRobot = loadImage("Robots/Robot_With_Pixel.png");
     imgGreenPixel = loadImage("Game_Elements/GreenPixel.png");
     imgRedCone = loadImage("Game_Elements/RedCone.png");
