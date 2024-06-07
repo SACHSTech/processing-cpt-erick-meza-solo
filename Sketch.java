@@ -12,17 +12,18 @@ public class Sketch extends PApplet {
   PImage imgFreightFrenzyLogo;
   PImage imgFTCRobotOne;
   PImage imgFTCRobotTwo;
-  PImage imgGreenLoadedRobot;
-  PImage imgPinkLoadedRobot;
+  PImage imgGreenLoadedRobotOne;
+  PImage imgPinkLoadedRobotOne;
+  PImage imgOrangeLoadedRobotOne;
   PImage imgYellowPixel;
   PImage imgGreenPixel;
   PImage imgPinkPixel;
-  PImage imgWhitePixel;
+  PImage imgOrangePixel;
   boolean[] blnHideOptions = new boolean[3];
   boolean[] blnMapeSelection = new boolean[3];
   boolean[] blnShowRobot = { false, false, false, false };
   boolean[] blnElements = { true, false, false, false, false, false };
-  int[] intMovement = { 10, -10 };
+  int[] intMovement = { 20, -20 };
   int intRobotOneX = 20;
   int intRobotOneY = 300;
   int intRobotTwoX = 420;
@@ -58,12 +59,13 @@ public class Sketch extends PApplet {
     imgFreightFrenzyLogo = loadImage("Logos/FreightFrenzy_Logo.png");
     imgFTCRobotOne = loadImage("Robots/FTCRobotOne.png");
     imgFTCRobotTwo = loadImage("Robots/FTCRobotTwo.png");
-    imgGreenLoadedRobot = loadImage("Loaded Robots/RobotOne (Green).png");
-    imgPinkLoadedRobot = loadImage("Loaded Robots/RobotOne (Pink).png");
+    imgGreenLoadedRobotOne = loadImage("Loaded Robots/RobotOne (Green).png");
+    imgPinkLoadedRobotOne = loadImage("Loaded Robots/RobotOne (Pink).png");
+    imgOrangeLoadedRobotOne = loadImage("Loaded Robots/RobotOne (Orange).png");
     imgYellowPixel = loadImage("Game_Elements/Pixel (Yellow).png");
     imgGreenPixel = loadImage("Game_Elements/Pixel (Green).png");
     imgPinkPixel = loadImage("Game_Elements/Pixel (Pink).png");
-    imgWhitePixel = loadImage("Game_Elements/Pixel (White).png");
+    imgOrangePixel = loadImage("Game_Elements/Pixel (Orange).png");
 
     // Resizes each image
     imgCenterstage.resize(width, height);
@@ -73,12 +75,13 @@ public class Sketch extends PApplet {
     imgFTCLogo.resize(200, 100);
     imgFTCRobotOne.resize(175, 175);
     imgFTCRobotTwo.resize(175, 175);
-    imgGreenLoadedRobot.resize(175, 175);
-    imgPinkLoadedRobot.resize(175, 175);
+    imgGreenLoadedRobotOne.resize(175, 175);
+    imgPinkLoadedRobotOne.resize(175, 175);
+    imgOrangeLoadedRobotOne.resize(175, 175);
     imgYellowPixel.resize(40, 40);
     imgGreenPixel.resize(40, 40);
     imgPinkPixel.resize(40, 40);
-    imgWhitePixel.resize(40, 40);
+    imgOrangePixel.resize(40, 40);
 
     // Outputs all logos
     image(imgFTCLogo, 10, 10);
@@ -136,7 +139,7 @@ public class Sketch extends PApplet {
         } else if (intColour == 3) {
 
           // Outputs a White Pixel
-          image(imgWhitePixel, intElementX, intElementY);
+          image(imgOrangePixel, intElementX, intElementY);
         }
 
       }
@@ -148,7 +151,7 @@ public class Sketch extends PApplet {
       for (int i = 0; i < blnElements.length; i++) {
 
         // Creates a conditional selective algorithm to check if the robot has intaked a pixel
-        if (intRobotOneX + 90 > intElementX && intRobotOneX + 40 < intElementX + 40 && intRobotOneY + 118 > intElementY && intRobotOneY < intElementY + 40 && blnElements[i] == true) {
+        if (intRobotOneX + 100 > intElementX && intRobotOneX + 60 < intElementX + 40 && intRobotOneY + 118 > intElementY && intRobotOneY < intElementY + 40 && blnElements[i] == true) {
 
           // Changes the robot to have the pixel intaked
           blnShowRobot[0] = false;
@@ -156,7 +159,7 @@ public class Sketch extends PApplet {
 
           // Hides the actual pixel image within the robot
           intElementX = intRobotOneX + 60;
-          intElementY = intRobotOneY + 35;
+          intElementY = intRobotOneY + 45;
 
         }
 
@@ -252,12 +255,16 @@ public class Sketch extends PApplet {
         if (intColour == 0) {
 
           // Outputs the robot with a green pixel
-          image(imgGreenLoadedRobot, intRobotOneX, intRobotOneY);
+          image(imgGreenLoadedRobotOne, intRobotOneX, intRobotOneY);
 
         } else if (intColour == 2){
 
-          //Outputs the robot with a pink pixel
-          image(imgPinkLoadedRobot, intRobotOneX, intRobotOneY);
+          // Outputs the robot with a pink pixel
+          image(imgPinkLoadedRobotOne, intRobotOneX, intRobotOneY);
+        } else if (intColour == 3){
+
+          // Outputs the robot with a white pixel
+          image(imgOrangeLoadedRobotOne, intRobotOneX, intRobotOneY);
         }
 
       }
@@ -385,6 +392,9 @@ public class Sketch extends PApplet {
 
   }
 
+  /**
+   * Creates a method to check if a map has been selected
+   */
   public void mapSelection() {
 
     // Creates a conditional selective algorithm to check if the player has clicked the centerstage gamemode
