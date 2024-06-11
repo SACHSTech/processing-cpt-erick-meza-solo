@@ -15,6 +15,11 @@ public class Sketch extends PApplet {
   PImage imgGreenLoadedRobotOne;
   PImage imgPinkLoadedRobotOne;
   PImage imgOrangeLoadedRobotOne;
+  PImage imgYellowLoadedRobotOne;
+  PImage imgGreenLoadedRobotTwo;
+  PImage imgPinkLoadedRobotTwo;
+  PImage imgOrangeLoadedRobotTwo;
+  PImage imgYellowLoadedRobotTwo;
   PImage imgYellowPixel;
   PImage imgGreenPixel;
   PImage imgPinkPixel;
@@ -62,6 +67,11 @@ public class Sketch extends PApplet {
     imgGreenLoadedRobotOne = loadImage("Loaded Robots/RobotOne (Green).png");
     imgPinkLoadedRobotOne = loadImage("Loaded Robots/RobotOne (Pink).png");
     imgOrangeLoadedRobotOne = loadImage("Loaded Robots/RobotOne (Orange).png");
+    imgYellowLoadedRobotOne = loadImage("Loaded Robots/RobotOne (Yellow).png");
+    imgGreenLoadedRobotTwo = loadImage("Loaded Robots/RobotTwo (Green).png");
+    imgPinkLoadedRobotTwo = loadImage("Loaded Robots/RobotTwo (Pink).png");
+    imgOrangeLoadedRobotTwo = loadImage("Loaded Robots/RobotTwo (Orange).png");
+    imgYellowLoadedRobotTwo = loadImage("Loaded Robots/RobotTwo (Yellow).png");
     imgYellowPixel = loadImage("Game_Elements/Pixel (Yellow).png");
     imgGreenPixel = loadImage("Game_Elements/Pixel (Green).png");
     imgPinkPixel = loadImage("Game_Elements/Pixel (Pink).png");
@@ -78,6 +88,11 @@ public class Sketch extends PApplet {
     imgGreenLoadedRobotOne.resize(175, 175);
     imgPinkLoadedRobotOne.resize(175, 175);
     imgOrangeLoadedRobotOne.resize(175, 175);
+    imgYellowLoadedRobotOne.resize(175,175);
+    imgGreenLoadedRobotTwo.resize(175, 175);
+    imgPinkLoadedRobotTwo.resize(175, 175);
+    imgOrangeLoadedRobotTwo.resize(175, 175);
+    imgYellowLoadedRobotTwo.resize(175,175);
     imgYellowPixel.resize(40, 40);
     imgGreenPixel.resize(40, 40);
     imgPinkPixel.resize(40, 40);
@@ -147,102 +162,8 @@ public class Sketch extends PApplet {
       // Outputs the score
       text(intScore, 800, 100);
 
-      // Creates a for loop for each game element
-      for (int i = 0; i < blnElements.length; i++) {
-
-        // Creates a conditional selective algorithm to check if the robot has intaked a pixel
-        if (intRobotOneX + 100 > intElementX && intRobotOneX + 60 < intElementX + 40 && intRobotOneY + 118 > intElementY && intRobotOneY < intElementY + 40 && blnElements[i] == true) {
-
-          // Changes the robot to have the pixel intaked
-          blnShowRobot[0] = false;
-          blnShowRobot[1] = true;
-
-          // Hides the actual pixel image within the robot
-          intElementX = intRobotOneX + 60;
-          intElementY = intRobotOneY + 45;
-
-        }
-
-        // Creates a conditional selective algorithm to check if the pixel has been outputted in the scoring area
-        if (blnShowRobot[1] == true && blnElements[i] == true && intRobotOneY + 10 < 0 && intRobotOneX + 60 < 350 && key == 'o') {
-
-          // Sets a new colour for the pixels
-          intColour = randColour.nextInt((3 - 0) + 1) + 0;
-
-          // Updates the robot image
-          blnShowRobot[0] = true;
-          blnShowRobot[1] = false;
-
-          // Updates the pixel's position
-          intElementX = intRobotOneX + 70;
-          intElementY = intRobotOneY + 120;
-
-          // Stops the pixel from being intaked again
-          blnElements[i] = false;
-
-          // Creates a conditional selective algorithm to check where to place the next pixel
-          if (i == 0) {
-
-            // Sets the new coordinates of the pixel
-            intElementX = 280;
-            intElementY = 650;
-
-            // Displays the next pixel
-            blnElements[i + 1] = true;
-
-          } else if (i == 1) {
-
-            // Sets the new coordinates of the pixel
-            intElementX = 358;
-            intElementY = 650;
-
-            // Displays the next pixel
-            blnElements[i + 1] = true;
-
-          } else if (i == 2) {
-
-            // Sets the new coordinates of the pixel
-            intElementX = 504;
-            intElementY = 650;
-
-            // Displays the next pixel
-            blnElements[i + 1] = true;
-
-          } else if (i == 3) {
-
-            // Sets the new coordinates of the pixel
-            intElementX = 580;
-            intElementY = 650;
-
-            // Displays the next pixel
-            blnElements[i + 1] = true;
-
-          } else if (i == 4) {
-
-            // Sets the new coordinates of the pixel
-            intElementX = 656;
-            intElementY = 650;
-
-            // Displays the next pixel
-            blnElements[i + 1] = true;
-
-          } else if (i == 5) {
-
-            // Sets the new coordinates of the pixel
-            intElementX = 204;
-            intElementY = 650;
-
-            // Displays the next pixel
-            blnElements[0] = true;
-
-          }
-
-          // Adds to the current score
-          intScore++;
-
-        }
-
-      }
+      collisionDetection();
+      
 
       // Creates a conditional selective algorithm to output robot one depending if the pixel is intaked or not
       if (blnShowRobot[0] == true) {
@@ -257,15 +178,22 @@ public class Sketch extends PApplet {
           // Outputs the robot with a green pixel
           image(imgGreenLoadedRobotOne, intRobotOneX, intRobotOneY);
 
+        } else if (intColour == 1){
+
+          // Outputs the robot with a yellow pixel
+          image(imgYellowLoadedRobotOne, intRobotOneX, intRobotOneY);
+          
         } else if (intColour == 2){
 
           // Outputs the robot with a pink pixel
           image(imgPinkLoadedRobotOne, intRobotOneX, intRobotOneY);
+
         } else if (intColour == 3){
 
           // Outputs the robot with a white pixel
           image(imgOrangeLoadedRobotOne, intRobotOneX, intRobotOneY);
-        }
+
+        } 
 
       }
 
@@ -274,6 +202,31 @@ public class Sketch extends PApplet {
 
         // Outputs robot two
         image(imgFTCRobotTwo, intRobotTwoX, intRobotTwoY);
+
+      } else if (blnShowRobot[2] == false && blnShowRobot[3] == true) {
+
+        if (intColour == 0) {
+
+          // Outputs the robot with a green pixel
+          image(imgGreenLoadedRobotTwo, intRobotTwoX, intRobotTwoY);
+
+        } else if (intColour == 1){
+
+          // Outputs the robot with a yellow pixel
+          image(imgYellowLoadedRobotTwo, intRobotTwoX, intRobotTwoY);
+          
+        } else if (intColour == 2){
+
+          // Outputs the robot with a pink pixel
+          image(imgPinkLoadedRobotTwo, intRobotTwoX, intRobotTwoY);
+
+        } else if (intColour == 3){
+
+          // Outputs the robot with a white pixel
+          image(imgOrangeLoadedRobotTwo, intRobotTwoX, intRobotTwoY);
+          
+        } 
+
       }
 
     }
@@ -409,6 +362,197 @@ public class Sketch extends PApplet {
 
     }
 
+  }
+
+  public void collisionDetection(){
+    // Creates a for loop for each game element
+    for (int i = 0; i < blnElements.length; i++) {
+
+      // Creates a conditional selective algorithm to check if robot one has intaked a pixel
+      if (intRobotOneX + 100 > intElementX && intRobotOneX + 60 < intElementX + 40 && intRobotOneY + 118 > intElementY && intRobotOneY < intElementY + 40 && blnElements[i] == true) {
+
+        // Changes the robot to have the pixel intaked
+        blnShowRobot[0] = false;
+        blnShowRobot[1] = true;
+
+        // Hides the actual pixel image within the robot
+        intElementX = intRobotOneX + 60;
+        intElementY = intRobotOneY + 45;
+
+      }
+
+      // Creates a conditional selective algorithm to check if robot two has intaked a pixel
+      if (intRobotTwoX + 100 > intElementX && intRobotTwoX + 60 < intElementX + 40 && intRobotTwoY + 118 > intElementY && intRobotTwoY < intElementY + 40 && blnElements[i] == true) {
+
+        // Changes the robot to have the pixel intaked
+        blnShowRobot[2] = false;
+        blnShowRobot[3] = true;
+
+        // Hides the actual pixel image within the robot
+        intElementX = intRobotTwoX + 60;
+        intElementY = intRobotTwoY + 45;
+
+      }
+
+      // Creates a conditional selective algorithm to check if the pixel has been outputted in the scoring area by robot one
+      if (blnShowRobot[1] == true && blnElements[i] == true && intRobotOneY + 10 < 0 && intRobotOneX + 60 < 350 && key == 'o') {
+
+        // Sets a new colour for the pixels
+        intColour = randColour.nextInt((3 - 0) + 1) + 0;
+
+        // Updates the robot image
+        blnShowRobot[0] = true;
+        blnShowRobot[1] = false;
+
+        // Updates the pixel's position
+        intElementX = intRobotOneX + 70;
+        intElementY = intRobotOneY + 120;
+
+        // Stops the pixel from being intaked again
+        blnElements[i] = false;
+
+        // Creates a conditional selective algorithm to check where to place the next pixel
+        if (i == 0) {
+
+          // Sets the new coordinates of the pixel
+          intElementX = 280;
+          intElementY = 650;
+
+          // Displays the next pixel
+          blnElements[i + 1] = true;
+
+        } else if (i == 1) {
+
+          // Sets the new coordinates of the pixel
+          intElementX = 358;
+          intElementY = 650;
+
+          // Displays the next pixel
+          blnElements[i + 1] = true;
+
+        } else if (i == 2) {
+
+          // Sets the new coordinates of the pixel
+          intElementX = 504;
+          intElementY = 650;
+
+          // Displays the next pixel
+          blnElements[i + 1] = true;
+
+        } else if (i == 3) {
+
+          // Sets the new coordinates of the pixel
+          intElementX = 580;
+          intElementY = 650;
+
+          // Displays the next pixel
+          blnElements[i + 1] = true;
+
+        } else if (i == 4) {
+
+          // Sets the new coordinates of the pixel
+          intElementX = 656;
+          intElementY = 650;
+
+          // Displays the next pixel
+          blnElements[i + 1] = true;
+
+        } else if (i == 5) {
+
+          // Sets the new coordinates of the pixel
+          intElementX = 204;
+          intElementY = 650;
+
+          // Displays the next pixel
+          blnElements[0] = true;
+
+        }
+
+        // Adds to the current score
+        intScore++;
+
+      }
+
+      // Creates a conditional selective algorithm to check if the pixel has been outputted in the scoring area by robot two
+      if (blnShowRobot[3] == true && blnElements[i] == true && intRobotTwoY + 10 < 0 && intRobotTwoX + 60 < 350 && key == 'o') {
+
+        // Sets a new colour for the pixels
+        intColour = randColour.nextInt((3 - 0) + 1) + 0;
+
+        // Updates the robot image
+        blnShowRobot[2] = true;
+        blnShowRobot[3] = false;
+
+        // Updates the pixel's position
+        intElementX = intRobotTwoX + 70;
+        intElementY = intRobotTwoY + 120;
+
+        // Stops the pixel from being intaked again
+        blnElements[i] = false;
+
+        // Creates a conditional selective algorithm to check where to place the next pixel
+        if (i == 0) {
+
+          // Sets the new coordinates of the pixel
+          intElementX = 280;
+          intElementY = 650;
+
+          // Displays the next pixel
+          blnElements[i + 1] = true;
+
+        } else if (i == 1) {
+
+          // Sets the new coordinates of the pixel
+          intElementX = 358;
+          intElementY = 650;
+
+          // Displays the next pixel
+          blnElements[i + 1] = true;
+
+        } else if (i == 2) {
+
+          // Sets the new coordinates of the pixel
+          intElementX = 504;
+          intElementY = 650;
+
+          // Displays the next pixel
+          blnElements[i + 1] = true;
+
+        } else if (i == 3) {
+
+          // Sets the new coordinates of the pixel
+          intElementX = 580;
+          intElementY = 650;
+
+          // Displays the next pixel
+          blnElements[i + 1] = true;
+
+        } else if (i == 4) {
+
+          // Sets the new coordinates of the pixel
+          intElementX = 656;
+          intElementY = 650;
+
+          // Displays the next pixel
+          blnElements[i + 1] = true;
+
+        } else if (i == 5) {
+
+          // Sets the new coordinates of the pixel
+          intElementX = 204;
+          intElementY = 650;
+
+          // Displays the next pixel
+          blnElements[0] = true;
+
+        }
+
+        // Adds to the current score
+        intScore++;
+
+      }
+
+    }
   }
 
 }
