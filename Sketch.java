@@ -1,15 +1,13 @@
 import processing.core.PApplet;
 import processing.core.PImage;
+import processing.core.PFont;
 import java.util.Random;
 
 public class Sketch extends PApplet {
 
   // Initializes variables
   PImage imgCenterstage;
-  PImage imgFTCLogo;
   PImage imgCenterstageLogo;
-  PImage imgPowerplayLogo;
-  PImage imgFreightFrenzyLogo;
   PImage imgFTCRobotOne;
   PImage imgFTCRobotTwo;
   PImage imgGreenLoadedRobotOne;
@@ -24,8 +22,17 @@ public class Sketch extends PApplet {
   PImage imgGreenPixel;
   PImage imgPinkPixel;
   PImage imgOrangePixel;
+  PImage img000Timer;
+  PImage img050Timer;
+  PImage img100Timer;
+  PImage img150Timer;
+  PImage img200Timer;
+  PImage img250Timer;
+  PImage imgWinnerBlue;
+  PImage imgWinnerRed;
+  int[] intTime = new int[1];
   boolean[] blnHideOptions = new boolean[3];
-  boolean[] blnMapeSelection = new boolean[3];
+  boolean[] blnMapSelection = new boolean[3];
   boolean[] blnShowRobot = { false, false, false, false };
   boolean[] blnElements = { true, false, false, false, false, false };
   int[] intMovement = { 20, -20 };
@@ -35,9 +42,14 @@ public class Sketch extends PApplet {
   int intRobotTwoY = 300;
   int intElementX = 204;
   int intElementY = 650;
-  int intScore = 0;
+  int intPlayerOneScore = 0;
+  int intPlayerTwoScore = 0;
   int intColour = 0;
+  float fltMinute = 0;
+  int intSecond = 0;
+  float fltTimeDisplacement = 0;
   Random randColour = new Random();
+  PFont textFont;
 
   /**
    * Called once at the beginning of execution, put your size all in this method
@@ -57,11 +69,8 @@ public class Sketch extends PApplet {
     background(255, 255, 255);
 
     // Loads each image within the program
-    imgCenterstage = loadImage("Gamemodes/Centerstage.png");
-    imgFTCLogo = loadImage("Logos/FTC_Logo.png");
-    imgCenterstageLogo = loadImage("Logos/Centerstage_Logo.png");
-    imgPowerplayLogo = loadImage("Logos/Powerplay_Logo.png");
-    imgFreightFrenzyLogo = loadImage("Logos/FreightFrenzy_Logo.png");
+    imgCenterstage = loadImage("Screen Images/Centerstage.png");
+    imgCenterstageLogo = loadImage("Screen Images/Centerstage_Logo.png");
     imgFTCRobotOne = loadImage("Robots/FTCRobotOne.png");
     imgFTCRobotTwo = loadImage("Robots/FTCRobotTwo.png");
     imgGreenLoadedRobotOne = loadImage("Loaded Robots/RobotOne (Green).png");
@@ -76,38 +85,51 @@ public class Sketch extends PApplet {
     imgGreenPixel = loadImage("Game_Elements/Pixel (Green).png");
     imgPinkPixel = loadImage("Game_Elements/Pixel (Pink).png");
     imgOrangePixel = loadImage("Game_Elements/Pixel (Orange).png");
+    img000Timer = loadImage("Timer/Timer (0).png");
+    img050Timer = loadImage("Timer/Timer (0.5).png");
+    img100Timer = loadImage("Timer/Timer (1).png");
+    img150Timer = loadImage("Timer/Timer (1.5).png");
+    img200Timer = loadImage("Timer/Timer (2).png");
+    img250Timer = loadImage("Timer/Timer (2.5).png");
+    imgWinnerBlue = loadImage("Screen Images/Blue Wins.png");
+    imgWinnerRed = loadImage("Screen Images/Red Wins.png");
+
 
     // Resizes each image
     imgCenterstage.resize(width, height);
-    imgCenterstageLogo.resize(200, 100);
-    imgPowerplayLogo.resize(200, 100);
-    imgFreightFrenzyLogo.resize(200, 100);
-    imgFTCLogo.resize(200, 100);
+    imgCenterstageLogo.resize(width, height);
     imgFTCRobotOne.resize(175, 175);
     imgFTCRobotTwo.resize(175, 175);
     imgGreenLoadedRobotOne.resize(175, 175);
     imgPinkLoadedRobotOne.resize(175, 175);
     imgOrangeLoadedRobotOne.resize(175, 175);
-    imgYellowLoadedRobotOne.resize(175,175);
+    imgYellowLoadedRobotOne.resize(175, 175);
     imgGreenLoadedRobotTwo.resize(175, 175);
     imgPinkLoadedRobotTwo.resize(175, 175);
     imgOrangeLoadedRobotTwo.resize(175, 175);
-    imgYellowLoadedRobotTwo.resize(175,175);
+    imgYellowLoadedRobotTwo.resize(175, 175);
     imgYellowPixel.resize(40, 40);
     imgGreenPixel.resize(40, 40);
     imgPinkPixel.resize(40, 40);
     imgOrangePixel.resize(40, 40);
+    img000Timer.resize(120, 80);
+    img050Timer.resize(120, 80);
+    img100Timer.resize(120, 80);
+    img150Timer.resize(120, 80);
+    img200Timer.resize(120, 80);
+    img250Timer.resize(120, 80);
+    imgWinnerBlue.resize(width, height);
+    imgWinnerRed.resize(width, height);
 
     // Outputs all logos
-    image(imgFTCLogo, 10, 10);
-    image(imgCenterstageLogo, width / 2 - 400, height / 2 - 150);
-    image(imgPowerplayLogo, width / 2 - 100, height / 2);
-    image(imgFreightFrenzyLogo, width / 2 + 200, height / 2 + 150);
+    image(imgCenterstageLogo, 0, 0);
 
     // Outputs an introduction text
-    fill(0, 0, 0);
-    textSize(35);
-    text("PRESS ANY GAMEMODE TO BEGIN", 40, 600);
+    textFont = createFont("Poor Richard", 40);
+    fill(255, 255, 255);
+    textSize(30);
+    textAlign(CENTER);
+    text("CLICK THE SCREEN TO BEGIN", width / 2, 650);
 
     // Sets the title of the screen
     surface.setTitle("Erick M - ICS3U1 CPT");
@@ -119,18 +141,36 @@ public class Sketch extends PApplet {
    */
   public void draw() {
 
+    // Creates a variable to track the time elapsed
+    int intMillis = millis();
+
     // Calls the map selection method
     mapSelection();
 
-    // Creates a conditional selective algorithm to check which map has been chosen
-    if (blnMapeSelection[0] == true) {
+    // Creates a conditional selective algorithm to check if the game has begun
+    if (blnMapSelection[0] == false){
 
-      // Calls the centerstage method
-      centerstage();
+      // Sets the value of intTime array to the current time
+      intTime[0] = millis();
+    }
+
+    // Creates a conditional selective algorithm to check which map has been chosen
+    if (blnMapSelection[0] == true) {
+
+      
+      // Displays the map
+      image(imgCenterstage, 0, 0);
 
       // Outputs the robot
       blnShowRobot[0] = true;
       blnShowRobot[2] = true;
+      
+      // Creates a variable to store the time starting when the game starts
+      fltTimeDisplacement = intMillis - intTime[0];
+      
+      // Calls the timeCheck() method to check delta time
+      timeCheck();
+        
 
       // Creates a conditional selective algorithm to output game elements
       if (blnElements[0] == true || blnElements[1] == true || blnElements[2] == true || blnElements[3] == true || blnElements[4] == true || blnElements[5] == true) {
@@ -155,15 +195,13 @@ public class Sketch extends PApplet {
 
           // Outputs a White Pixel
           image(imgOrangePixel, intElementX, intElementY);
+
         }
 
       }
 
-      // Outputs the score
-      text(intScore, 800, 100);
-
+      // Calls the collisionDetection() method to check if objects have collided
       collisionDetection();
-      
 
       // Creates a conditional selective algorithm to output robot one depending if the pixel is intaked or not
       if (blnShowRobot[0] == true) {
@@ -173,27 +211,28 @@ public class Sketch extends PApplet {
 
       } else if (blnShowRobot[0] == false && blnShowRobot[1] == true) {
 
+        // Creates a conditional selective algorithm to check the colour of the intaked pixel
         if (intColour == 0) {
 
           // Outputs the robot with a green pixel
           image(imgGreenLoadedRobotOne, intRobotOneX, intRobotOneY);
 
-        } else if (intColour == 1){
+        } else if (intColour == 1) {
 
           // Outputs the robot with a yellow pixel
           image(imgYellowLoadedRobotOne, intRobotOneX, intRobotOneY);
-          
-        } else if (intColour == 2){
+
+        } else if (intColour == 2) {
 
           // Outputs the robot with a pink pixel
           image(imgPinkLoadedRobotOne, intRobotOneX, intRobotOneY);
 
-        } else if (intColour == 3){
+        } else if (intColour == 3) {
 
           // Outputs the robot with a white pixel
           image(imgOrangeLoadedRobotOne, intRobotOneX, intRobotOneY);
 
-        } 
+        }
 
       }
 
@@ -205,63 +244,32 @@ public class Sketch extends PApplet {
 
       } else if (blnShowRobot[2] == false && blnShowRobot[3] == true) {
 
+        // Creates a conditional selective algorithm to check the colour of the pixel grabbed
         if (intColour == 0) {
 
           // Outputs the robot with a green pixel
           image(imgGreenLoadedRobotTwo, intRobotTwoX, intRobotTwoY);
 
-        } else if (intColour == 1){
+        } else if (intColour == 1) {
 
           // Outputs the robot with a yellow pixel
           image(imgYellowLoadedRobotTwo, intRobotTwoX, intRobotTwoY);
-          
-        } else if (intColour == 2){
+
+        } else if (intColour == 2) {
 
           // Outputs the robot with a pink pixel
           image(imgPinkLoadedRobotTwo, intRobotTwoX, intRobotTwoY);
 
-        } else if (intColour == 3){
+        } else if (intColour == 3) {
 
           // Outputs the robot with a white pixel
           image(imgOrangeLoadedRobotTwo, intRobotTwoX, intRobotTwoY);
-          
-        } 
+
+        }
 
       }
 
     }
-
-    // Creates a conditional selective algorithm to check if the robot has left the screen
-    if (intRobotOneX + 175 > width) {
-
-      // Moves the robot back onto the screen
-      intRobotOneX -= 5;
-
-    } else if (intRobotOneX + 18 < 0) {
-
-      // Moves the robot back onto the screen
-      intRobotOneX += 5;
-
-    } else if (intRobotOneY + 136 > height) {
-
-      // Moves the robot back onto the screen
-      intRobotOneY -= 5;
-
-    } else if (intRobotOneY + 40 < 0) {
-
-      // Moves the robot back onto the screen
-      intRobotOneY += 5;
-
-    }
-  }
-
-  /**
-   * Creates a method to run code affiliated with centerstage
-   */
-  public void centerstage() {
-
-    // Outputs the centerstage field
-    image(imgCenterstage, 0, 0);
 
   }
 
@@ -269,32 +277,6 @@ public class Sketch extends PApplet {
    * Creates a method for when a key is pressed
    */
   public void keyPressed() {
-
-    // Creates a conditional selective algorithm to check if the person has clicked TAB
-    if (keyCode == TAB) {
-
-      // Creates a for loop to reset the array for gamemode buttons
-      for (int i = 0; i < blnHideOptions.length; i++) {
-
-        // Updates the array to show the buttons
-        blnHideOptions[i] = false;
-
-      }
-
-      // Outputs the background
-      background(255, 255, 255);
-
-      // Outputs logos and buttons
-      image(imgFTCLogo, 10, 10);
-      image(imgCenterstageLogo, width / 2 - 400, height / 2 - 150);
-      image(imgPowerplayLogo, width / 2 - 100, height / 2);
-      image(imgFreightFrenzyLogo, width / 2 + 200, height / 2 + 150);
-
-      // Creates an introduction text
-      fill(0, 0, 0);
-      textSize(35);
-      text("PRESS ANY GAMEMODE TO BEGIN", 40, 600);
-    }
 
     // Creates a conditional selective algorithm for the movement of robot one
     if (key == 'w') {
@@ -323,7 +305,7 @@ public class Sketch extends PApplet {
     // Creates a conditional selective algorithm for the movement of robot two
     if (keyCode == UP) {
 
-      // Moves robot two up 
+      // Moves robot two up
       intRobotTwoY += intMovement[1];
 
     } else if (keyCode == LEFT) {
@@ -351,11 +333,10 @@ public class Sketch extends PApplet {
   public void mapSelection() {
 
     // Creates a conditional selective algorithm to check if the player has clicked the centerstage gamemode
-    if (mousePressed == true && blnHideOptions[0] == false && (mouseX > width / 2 - 400 && mouseX < width / 2 - 400 + 200 && mouseY > height / 2 - 150 && mouseY < height / 2 - 150 + 100)) {
+    if (mousePressed == true && blnHideOptions[0] == false) {
 
-      // Calls the centerstage method
-      image(imgCenterstage, 0, 0);
-      blnMapeSelection[0] = true;
+      // Displays the centerstage map
+      blnMapSelection[0] = true;
 
       // Updates the array to remove the button
       blnHideOptions[0] = true;
@@ -364,7 +345,11 @@ public class Sketch extends PApplet {
 
   }
 
-  public void collisionDetection(){
+  /**
+   * Creates a method to check if images have collided
+   */
+  public void collisionDetection() {
+
     // Creates a for loop for each game element
     for (int i = 0; i < blnElements.length; i++) {
 
@@ -395,7 +380,8 @@ public class Sketch extends PApplet {
       }
 
       // Creates a conditional selective algorithm to check if the pixel has been outputted in the scoring area by robot one
-      if (blnShowRobot[1] == true && blnElements[i] == true && intRobotOneY + 10 < 0 && intRobotOneX + 60 < 350 && key == 'o') {
+      if (blnShowRobot[1] == true && blnElements[i] == true && intRobotOneY + 10 < 0 && intRobotOneX + 60 < 350
+          && key == 'o') {
 
         // Sets a new colour for the pixels
         intColour = randColour.nextInt((3 - 0) + 1) + 0;
@@ -469,12 +455,12 @@ public class Sketch extends PApplet {
         }
 
         // Adds to the current score
-        intScore++;
+        intPlayerOneScore++;
 
       }
 
       // Creates a conditional selective algorithm to check if the pixel has been outputted in the scoring area by robot two
-      if (blnShowRobot[3] == true && blnElements[i] == true && intRobotTwoY + 10 < 0 && intRobotTwoX + 60 < 350 && key == 'o') {
+      if (blnShowRobot[3] == true && blnElements[i] == true && intRobotTwoY + 10 < 0 && intRobotTwoX + 60 > 510 && key == 'o') {
 
         // Sets a new colour for the pixels
         intColour = randColour.nextInt((3 - 0) + 1) + 0;
@@ -548,11 +534,124 @@ public class Sketch extends PApplet {
         }
 
         // Adds to the current score
-        intScore++;
+        intPlayerTwoScore++;
 
       }
 
     }
-  }
 
+    // Creates a conditional selective algorithm to check if robot one has left the screen
+    if (intRobotOneX + 160 > width) {
+
+      // Moves the robot back onto the screen
+      intRobotOneX -= 5;
+
+    } else if (intRobotOneX + 20 < 0) {
+
+      // Moves the robot back onto the screen
+      intRobotOneX += 5;
+
+    } else if (intRobotOneY + 136 > height) {
+
+      // Moves the robot back onto the screen
+      intRobotOneY -= 5;
+
+    } else if (intRobotOneY + 40 < 0) {
+
+      // Moves the robot back onto the screen
+      intRobotOneY += 5;
+
+    }
+
+    // Creates a conditional selective algorithm to check if robot two has left the screen
+    if (intRobotTwoX + 164 > width) {
+
+      // Moves the robot back onto the screen
+      intRobotTwoX -= 5;
+
+    } else if (intRobotTwoX + 18 < 0) {
+
+      // Moves the robot back onto the screen
+      intRobotTwoX += 5;
+
+    } else if (intRobotTwoY + 136 > height) {
+
+      // Moves the robot back onto the screen
+      intRobotTwoY -= 5;
+
+    } else if (intRobotTwoY + 40 < 0) {
+
+      // Moves the robot back onto the screen
+      intRobotTwoY += 5;
+
+    }
+
+    // Creates a conditional selective algorithm to check if the robots have collided with each other
+    if (intRobotOneX + 160 > intRobotTwoX && intRobotOneX < intRobotTwoX + 164 && intRobotOneY + 136 > intRobotTwoY && intRobotOneY < intRobotTwoY + 136) {
+
+      // Moves each robot in opposite directions
+      intRobotOneX -= 5;
+      intRobotTwoX += 5;
+
+    } 
+
+  }
+  
+  /**
+   * Creates a method to check the current time
+   */
+  public void timeCheck(){
+
+    // Creates a conditional selective algorithm to check the time
+    if (fltTimeDisplacement < 30000){
+
+      // Displays the 0:00 timer
+      image(img000Timer, width / 2 - 60, 0);
+
+    } else if (fltTimeDisplacement > 30000 && fltTimeDisplacement < 60000) {
+
+      // Displays the 0:30 timer
+      image(img050Timer, width / 2 - 60, 0);
+
+    } else if (fltTimeDisplacement > 60000 && fltTimeDisplacement < 90000){
+
+      // Displays the 1:00 timer
+      image(img100Timer, width / 2 - 60, 0);
+
+    } else if (fltTimeDisplacement > 90000 && fltTimeDisplacement < 120000){
+
+      // Displays the 1:30 timer
+      image(img150Timer, width / 2 - 60, 0);
+
+    } else if (fltTimeDisplacement > 120000 && fltTimeDisplacement < 150000){
+
+      // Displays the 2:00 timer
+      image(img200Timer, width / 2 - 60, 0);
+
+    } else if (fltTimeDisplacement > 150000){
+      
+      // Removes the robots
+      blnShowRobot[0] = false;
+      blnShowRobot[2] = false;
+
+      // Stops the draw() method from looping
+      noLoop();
+
+      // Creates a conditional selective algorithm to check which player has won
+      if (intPlayerOneScore > intPlayerTwoScore){
+
+        // Outputs a winning screen for blue alliance
+        image(imgWinnerBlue, 0, 0);
+        
+      } else if (intPlayerOneScore < intPlayerTwoScore){
+
+        // Outputs a winning screen for red alliance
+        image(imgWinnerRed, 0, 0);
+
+      }
+      
+    }
+
+  }
+  
 }
